@@ -26,18 +26,13 @@ function saveToStorage() {
 
 // Step 4 - Update the 3 counters (Total, Completed, Pending)
 function updateCounters() {
-  var total     = tasks.length;
-  var completed = 0;
+  var completed = tasks.filter(function(task) {
+    return task.completed;
+  }).length;
 
-  for (var i = 0; i < tasks.length; i++) {
-    if (tasks[i].completed === true) {
-      completed = completed + 1;
-    }
-  }
-
-  totalCount.textContent     = total;
+  totalCount.textContent = tasks.length;
   completedCount.textContent = completed;
-  pendingCount.textContent   = total - completed;
+  pendingCount.textContent = tasks.length - completed;
 }
 
 // Step 5 - Return a colored badge based on priority
@@ -134,13 +129,10 @@ function toggleComplete(id) {
 
 // Step 9 - Delete a task
 function deleteTask(id) {
-  var newTasks = [];
-  for (var i = 0; i < tasks.length; i++) {
-    if (tasks[i].id !== id) {
-      newTasks.push(tasks[i]);
-    }
-  }
-  tasks = newTasks;
+  tasks = tasks.filter(function(task) {
+    return task.id !== id;
+  });
+
   saveToStorage();
   renderTasks();
 }
